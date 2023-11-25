@@ -1,90 +1,55 @@
-# React + Aleo + Leo
+# Aim : To deploy helloworld on local node 
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/AleoHQ/sdk/tree/testnet3/create-aleo-app/template-react)
+# Reproducing the error
 
-This template provides a minimal setup to get React and Aleo working in Vite
-with HMR and some ESLint rules.
+Step 1: Instantiated the starter code using the command `npm create aleo-app@latest`  and then did `npm install` and `npm run dev` to start the project UI
 
-This template includes a Leo program that is loaded by the web app located in
-the `helloworld` directory.
+Step 2: Made some changes in the starter code i.e. changed the `ENDPOINT` to https://localhost:3030 and filled the value of `PRIVATE_KEY`
 
-Note: Webpack is currently used for production builds due to a
-[bug](https://github.com/vitejs/vite/issues/13367) with Vite related to nested
-workers.
+Step 3: Installed the `snarkos`  using the following instructions
 
-### Start in development mode
+### Installation Steps
+
+* **Clone the snarkos repo**
+
+```sh
+git clone git@github.com:AleoHQ/snarkOS.git
+```
+
+* **Checkout the correct version**
+
+```sh
+git checkout 7970ea752ea73ae234f749dd395006e3e231f256
+```
+
+I installed this specific version as I didn't face any issues while working on the last project.
+
+* **Install**
 
 ```bash
-npm run dev
+cargo install --path .
 ```
 
-Your app should be running on http://localhost:5173/
+Step 4: After this, I started  the local development node by running the command
 
-### Build Leo program
+````bash
+snarkos start --nodisplay --dev 0 --beacon
+````
 
-1. Copy the `helloworld/.env.example` to `helloworld/.env` (this will be ignored
-   by Git):
+I sent some credits from the node account to developer account (the account used in the `worker.js`) using both the functions `transfer_private_to_public` and `transfer_private`
 
-   ```bash
-   cd helloworld
-   cp .env.example .env
-   ```
 
-2. Replace `PRIVATE_KEY=user1PrivateKey` in the `.env` with your own key (you
-   can use an existing one or generate your own at https://aleo.tools/account)
 
-3. Follow instructions to install Leo here: https://github.com/AleoHQ/leo
 
-4. You can edit `helloworld/src/main.leo` and run `leo run` to compile and update the
-   Aleo instructions under `build` which are loaded by the web app.
 
-## Deploy program from web app
-
-> [!WARNING]  
-> This is for demonstration purposes or local testing only, in production applications you
-> should avoid building a public facing web app with private key information
-
-Information on generating a private key, seeding a wallet with funds, and finding a spendable record can be found here
-if you are unfamiliar: https://developer.aleo.org/testnet/getting_started/deploy_execute_demo
-
-Aleo programs deployed require unique names, make sure to edit the program's name to something unique in `helloworld/src/main.leo`, `helloworld/program.json`, rename `helloworld/inputs/helloworld.in` and rebuild.
-
-1. In the `worker.js` file modify the privateKey to be an account with available
-   funds
-
-   ```js
-   // Use existing account with funds
-   const account = new Account({
-     privateKey: "user1PrivateKey",
-   });
-   ```
-
-2. (Optional) Provide a fee record manually (located in commented code within `worker.js`)
-
-   If you do not provide a manual fee record, the SDK will attempt to scan for a record starting at the latest block. A simple way to speed this up would be to make a public transaction to this account right before deploying.
-   
-3. Run the web app and hit the deploy button
-
-## Production deployment
-
-### Build
-
-`npm run build`
-
-Upload `dist` folder to your host of choice.
-
-### ⚠️ Header warnings
-
-`DOMException: Failed to execute 'postMessage' on 'Worker': SharedArrayBuffer transfer requires self.crossOriginIsolated`
-
-If you get a warning similar to this when deploying your application, you need
-to make sure your web server is configured with the following headers:
+Step 5: I tried deploying the code using the deploy `helloworld.aleo` button on the UI but after taking some zk-time, I started getting this issue
 
 ```
-Cross-Origin-Opener-Policy: same-origin
-Cross-Origin-Embedder-Policy: require-corp
+error decoding response body: Invalid prefix for a bech32m hash: ar
 ```
 
-We've included a `_headers` file that works with some web hosts (e.g. Netlify)
-but depending on your host / server setup you may need to configure the headers
-manually.
+Please find the console logs below in the screenshot 
+
+![image-20231125235227378](/Users/consentsam/Library/Application Support/typora-user-images/image-20231125235227378.png)
+
+I have been getting this error whenever I am trying to interact with `execute` function of the `programManager` class. I am not able to understand what this error `Invalid prefix for a bech32m hash: ar` . Please note that when I try to deploy the program locally, I have been able to deploy the program on the local aleo blockchain ( local development node).
