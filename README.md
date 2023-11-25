@@ -36,6 +36,7 @@ Step 4: After this, I started  the local development node by running the command
 snarkos start --nodisplay --dev 0 --beacon
 ````
 
+
 I sent some credits from the node account to developer account (the account used in the `worker.js`) using both the functions `transfer_private_to_public` and `transfer_private`
 
 
@@ -50,6 +51,7 @@ error decoding response body: Invalid prefix for a bech32m hash: ar
 
 Please find the console logs below in the screenshot 
 
-![image-20231125235227378](/Users/consentsam/Library/Application Support/typora-user-images/image-20231125235227378.png)
+![ 2023-11-25 at 11 30 07 PM](https://github.com/consentsam/create-aleo-demo/assets/16432541/0075cd13-b88f-4aa2-add5-f4b1aa4433e4)
+
 
 I have been getting this error whenever I am trying to interact with `execute` function of the `programManager` class. I am not able to understand what this error `Invalid prefix for a bech32m hash: ar` . Please note that when I try to deploy the program locally, I have been able to deploy the program on the local aleo blockchain ( local development node).
